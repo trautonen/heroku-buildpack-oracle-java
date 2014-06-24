@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+export_env_dir() {
+  env_dir=$1
+  whitelist_regex=${2:-''}
+  blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH|JAVA_OPTS)$'}
+  if [ -d "$env_dir" ]; then
+    for e in $(ls $env_dir); do
+      echo "$e" | grep -E "$whitelist_regex" | grep -qvE "$blacklist_regex" &&
+      export "$e=$(cat $env_dir/$e)"
+      :
+    done
+  fi
+}
+
+install_java() {
+  cache_dir=$1
+  build_dir=$2
+  jdk_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u5-b13/jdk-8u5-linux-x64.tar.gz"}
+  
+  if [ ! -d "${cache_dir}" ]; then echo "Invalid cache directory to store JDK."; return 1; fi
+  if [ ! -d "${build_dir}" ]; then echo "Invalid slug directory to install JDK."; return 1; fi
+  
+  mkdir -p "${build_dir}/.jdk"
+  
+  if [ ! -d "${cache_dir}/.jdk" ] || [ ! -f "${cache_dir}/.jdk/bin/java" ]; then
+    rm -rf "${cache_dir}/.jdk" && mkdir -p "${cache_dir}/.jdk"
+    wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O - "${jdk_url}" | tar xz -C "${cache_dir}/.jdk" --strip-components=1 
+    rm -rf "${cache_dir}/.jdk/src.zip" "${cache_dir}/.jdk/javafx-src.zip" "${cache_dir}/.jdk/db" "${cache_dir}/.jdk/man"
+  fi
+  cp -r "${cache_dir}/.jdk/." "${build_dir}/.jdk"
+  
+  if [ ! -f "${build_dir}/.jdk/bin/java" ]; then
+    echo "Unable to retrieve JDK."
+    return 1
+  fi
+  
+  export JAVA_HOME="${build_dir}/.jdk"
+  export PATH="${build_dir}/.jdk/bin:${PATH}"
+}
+
+install_maven() {
+  cache_dir=$1
+  maven_url=${2:-"http://www.nic.funet.fi/pub/mirrors/apache.org/maven/maven-3/3.2.1/binaries/apache-maven-3.2.1-bin.tar.gz"}
+
+  if [ ! -d "${cache_dir}" ]; then echo "Invalid cache directory to store Maven."; return 1; fi
+
+  if [ ! -d "${cache_dir}/.maven" ] || [ ! -f "${cache_dir}/.maven/bin/mvn" ]; then
+    rm -rf "${cache_dir}/.maven" && mkdir -p "${cache_dir}/.maven"
+    wget --quiet --no-check-certificate -O - "${maven_url}" | tar xz -C "${cache_dir}/.maven" --strip-components=1
+  fi
+  
+  if [ ! -f "${cache_dir}/.maven/bin/mvn" ]; then
+    echo "Unable to retrieve Maven."
+    return 1
+  fi
+  
+  export MAVEN_OPTS=${MAVEN_OPTS:-"-Xmx384m -Xss128m"}
+  export M2_HOME="${cache_dir}/.maven"
+  export M2="${M2_HOME}/bin"
+  export PATH="${M2}:${PATH}"
+}
+
+create_profile() {
+  build_dir=$1
+  
+  if [ ! -d "${build_dir}" ]; then echo "Invalid slug directory to create Java profile."; return 1; fi
+
+  profile_path="${build_dir}/.profile.d/java.sh"
+  mkdir -p $(dirname $profile_path)
+  echo 'export JAVA_HOME="/app/.jdk"' > $profile_path
+  echo 'export JAVA_OPTS=${JAVA_OPTS:-"-Xmx384m -Xss128m"}' >> $profile_path
+  echo 'export PATH="/app/.jdk/bin:$PATH"' >> $profile_path
+}

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# bin/use <build-dir>
+
+BUILD_DIR=$1
+
+if [ -f "${BUILD_DIR}/pom.xml" ]; then
+  echo "Java" && exit 0
+else
+  echo "no" && exit 1
+fi

@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
+
+# fail fast
+set -e
+set -o pipefail
+
+BIN_DIR=$(cd $(dirname $0) && pwd) # absolute path
+
+# parse args
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+
+. $BIN_DIR/../lib/utils
+
+export_env_dir $ENV_DIR
+
+#create the cache dir if it doesn't exist
+mkdir -p $CACHE_DIR
+
+
+echo -n "-----> Installing JDK..."
+install_java $CACHE_DIR $BUILD_DIR
+echo " done"
+
+echo -n "-----> Installing Maven..."
+install_maven $CACHE_DIR
+echo " done"
+
+cd $BUILD_DIR
+
+BUILDCMD="mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository -DskipTests=true -U clean install"
+echo "-----> $BUILDCMD"
+echo "       MAVEN_OPTS=$MAVEN_OPTS"
+
+$BUILDCMD 2>&1 | sed -u 's/^/       /'
+
+if [ "${PIPESTATUS[*]}" != "0 0" ]; then
+  echo "Failed to build app with Maven"
+  exit 1
+fi
+
+create_profile $BUILD_DIR
+
+rm -rf "$CACHE_DIR/.m2"
