@@ -31,6 +31,9 @@ statusn "Installing Maven..."
 install_maven $CACHE_DIR
 echo " version $(maven_version) installed"
 
+status "Installing Gems..."
+install_gems $CACHE_DIR $GEMS
+
 cd $BUILD_DIR
 
 BUILDCMD="mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository -DskipTests=true -U clean install"

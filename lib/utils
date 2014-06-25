@@ -60,7 +60,7 @@ install_wget() {
     cd $(mktmpdir wget)
     curl --silent "${wget_url}" | tar xz --strip-components=1
     ./configure --silent --prefix=${cache_dir}/.tools/wget --with-ssl=openssl
-    make -s && make -s install
+    make --silent >/dev/null && make --silent install >/dev/null
   fi
   
   if [ ! -f "${cache_dir}/.tools/wget/bin/wget" ]; then
@@ -122,6 +122,23 @@ install_maven() {
   export M2_HOME="${cache_dir}/.maven"
   export M2="${M2_HOME}/bin"
   export PATH="${M2}:${PATH}"
+}
+
+install_gems() {
+  cache_dir=$1
+  gems=$2
+  
+  if [ ! -d "${cache_dir}" ]; then echo "Invalid cache directory to store Ruby gems."; return 1; fi
+
+  rm -rf "${cache_dir}/.gems" && mkdir -p "${cache_dir}/.gems"
+
+  for gem in $gems
+  do
+    gem install --no-rdoc --no-ri -i "${cache_dir}/.gems" "${gem}"
+  done
+  
+  export PATH="${cache_dir}/.gems/bin:${PATH}"
+  export GEM_PATH="${cache_dir}/.gems:${GEM_PATH}"
 }
 
 create_profile() {
