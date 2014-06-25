@@ -48,4 +48,4 @@ $BUILDCMD 2>&1 | indent
 
 create_profile $BUILD_DIR
 
-rm -rf "$CACHE_DIR/.m2"
+rm -rf "$CACHE_DIR/.m2" "$CACHE_DIR/.gems"
