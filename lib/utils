@@ -52,15 +52,15 @@ install_wget() {
   cache_dir=$1
   wget_url=${2:-"http://ftp.gnu.org/gnu/wget/wget-1.15.tar.gz"}
   
-  if [ ! -d "${cache_dir}" ]; then echo "Invalid cache directory to store wget."; return 1; fi
+  if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store wget."; fi
   
   if [ ! -d "${cache_dir}/.tools/wget" ] || [ ! -f "${cache_dir}/.tools/wget/bin/wget" ]; then
     rm -rf "${cache_dir}/.tools/wget" && mkdir -p "${cache_dir}/.tools/wget"
   
     cd $(mktmpdir wget)
     curl --silent "${wget_url}" | tar xz --strip-components=1
-    ./configure --silent --prefix=${cache_dir}/.tools/wget --with-ssl=openssl
-    make --silent >/dev/null && make --silent install >/dev/null
+    ./configure --silent --prefix=${cache_dir}/.tools/wget --with-ssl=openssl >/dev/null 2>&1
+    make --silent >/dev/null 2>&1 && make --silent install >/dev/null 2>&1
   fi
   
   if [ ! -f "${cache_dir}/.tools/wget/bin/wget" ]; then
@@ -79,8 +79,8 @@ install_java() {
   build_dir=$2
   jdk_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u5-b13/jdk-8u5-linux-x64.tar.gz"}
   
-  if [ ! -d "${cache_dir}" ]; then echo "Invalid cache directory to store JDK."; return 1; fi
-  if [ ! -d "${build_dir}" ]; then echo "Invalid slug directory to install JDK."; return 1; fi
+  if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store JDK."; fi
+  if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to install JDK."; fi
   
   mkdir -p "${build_dir}/.jdk"
   
@@ -107,7 +107,7 @@ install_maven() {
   cache_dir=$1
   maven_url=${2:-"http://ftp.heanet.ie/mirrors/www.apache.org/dist/maven/maven-3/3.2.1/binaries/apache-maven-3.2.1-bin.tar.gz"}
 
-  if [ ! -d "${cache_dir}" ]; then echo "Invalid cache directory to store Maven."; return 1; fi
+  if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store Maven."; fi
 
   if [ ! -d "${cache_dir}/.maven" ] || [ ! -f "${cache_dir}/.maven/bin/mvn" ]; then
     rm -rf "${cache_dir}/.maven" && mkdir -p "${cache_dir}/.maven"
@@ -128,14 +128,11 @@ install_gems() {
   cache_dir=$1
   gems=$2
   
-  if [ ! -d "${cache_dir}" ]; then echo "Invalid cache directory to store Ruby gems."; return 1; fi
+  if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store Ruby gems."; fi
 
   rm -rf "${cache_dir}/.gems" && mkdir -p "${cache_dir}/.gems"
 
-  for gem in $gems
-  do
-    gem install --no-rdoc --no-ri -i "${cache_dir}/.gems" "${gem}"
-  done
+  gem install --no-rdoc --no-ri -i "${cache_dir}/.gems" ${gems} | indent
   
   export PATH="${cache_dir}/.gems/bin:${PATH}"
   export GEM_PATH="${cache_dir}/.gems:${GEM_PATH}"
@@ -144,7 +141,7 @@ install_gems() {
 create_profile() {
   build_dir=$1
   
-  if [ ! -d "${build_dir}" ]; then echo "Invalid slug directory to create Java profile."; return 1; fi
+  if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to create Java profile."; fi
 
   profile_path="${build_dir}/.profile.d/java.sh"
   mkdir -p $(dirname $profile_path)
