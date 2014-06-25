@@ -44,7 +44,7 @@ echo "$BUILDCMD" | indent
 echo "[INFO] MAVEN_OPTS=$MAVEN_OPTS" | indent
 echo "[INFO] ------------------------------------------------------------------------" | indent
 
-$BUILDCMD 2>&1 | grep --line-buffered -v '^(Downloading:|Downloaded:)' | indent
+$BUILDCMD 2>&1 | grep --line-buffered -v '^(\[INFO\] )?(Downloading:|Downloaded:)' | indent
 
 create_profile $BUILD_DIR
 
