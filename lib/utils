@@ -58,7 +58,7 @@ install_wget() {
     rm -rf "${cache_dir}/.tools/wget" && mkdir -p "${cache_dir}/.tools/wget"
   
     cd $(mktmpdir wget)
-    curl --silent http://ftp.gnu.org/gnu/wget/wget-1.13.4.tar.bz2 | tar xj --strip-components=1
+    curl --silent "${wget_url}" | tar xj --strip-components=1
     ./configure --silent --prefix=${cache_dir}/.tools/wget --with-ssl=openssl
     make --silent && make --silent install
   fi
