@@ -55,6 +55,8 @@ install_wget() {
   
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store wget."; fi
   
+  echo -n "${wget_ver} : $(wget_version)"
+  echo "$(ls ${cache_dir}/.tools/wget/bin/wget)"
   if [ ! -f "${cache_dir}/.tools/wget/bin/wget" ] || [ "${wget_ver}" != "$(wget_version)" ]; then
     echo -n " (downloading)"
     rm -rf "${cache_dir}/.tools/wget" && mkdir -p "${cache_dir}/.tools/wget"
@@ -87,7 +89,7 @@ install_java() {
   
   mkdir -p "${build_dir}/.jdk"
   
-  if [ ! -f "${cache_dir}/.jdk/bin/java" ] || [ $jdk_ver != "$(java_version)" ] ; then
+  if [ ! -f "${cache_dir}/.jdk/bin/java" ] || [ "${jdk_ver}" != "$(java_version)" ] ; then
     echo -n " (downloading)"
     rm -rf "${cache_dir}/.jdk" && mkdir -p "${cache_dir}/.jdk"
     wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O - "${jdk_url}" | tar xz -C "${cache_dir}/.jdk" --strip-components=1 
