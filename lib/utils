@@ -51,10 +51,11 @@ wget_version() {
 install_wget() {
   cache_dir=$1
   wget_url=${2:-"http://ftp.gnu.org/gnu/wget/wget-1.15.tar.gz"}
+  wget_ver=${3:-"1.15"}
   
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store wget."; fi
   
-  if [ ! -d "${cache_dir}/.tools/wget" ] || [ ! -f "${cache_dir}/.tools/wget/bin/wget" ]; then
+  if [ ! -f "${cache_dir}/.tools/wget/bin/wget" ] || [ "${wget_ver}" != "$(wget_version)" ]; then
     rm -rf "${cache_dir}/.tools/wget" && mkdir -p "${cache_dir}/.tools/wget"
   
     cd $(mktmpdir wget)
@@ -78,13 +79,14 @@ install_java() {
   cache_dir=$1
   build_dir=$2
   jdk_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u5-b13/jdk-8u5-linux-x64.tar.gz"}
+  jdk_ver=${4:-"1.8.0_05"}
   
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store JDK."; fi
   if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to install JDK."; fi
   
   mkdir -p "${build_dir}/.jdk"
   
-  if [ ! -d "${cache_dir}/.jdk" ] || [ ! -f "${cache_dir}/.jdk/bin/java" ]; then
+  if [ ! -f "${cache_dir}/.jdk/bin/java" ] || [ "${jdk_ver}" != "$(java_version)" ] ; then
     rm -rf "${cache_dir}/.jdk" && mkdir -p "${cache_dir}/.jdk"
     wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O - "${jdk_url}" | tar xz -C "${cache_dir}/.jdk" --strip-components=1 
     rm -rf "${cache_dir}/.jdk/src.zip" "${cache_dir}/.jdk/javafx-src.zip" "${cache_dir}/.jdk/db" "${cache_dir}/.jdk/man"
@@ -106,10 +108,11 @@ maven_version() {
 install_maven() {
   cache_dir=$1
   maven_url=${2:-"http://ftp.heanet.ie/mirrors/www.apache.org/dist/maven/maven-3/3.2.1/binaries/apache-maven-3.2.1-bin.tar.gz"}
+  maven_ver=${3:-"3.2.1"}
 
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store Maven."; fi
 
-  if [ ! -d "${cache_dir}/.maven" ] || [ ! -f "${cache_dir}/.maven/bin/mvn" ]; then
+  if [ ! -f "${cache_dir}/.maven/bin/mvn" ] || [ "${maven_ver}" != "$(maven_version)" ]; then
     rm -rf "${cache_dir}/.maven" && mkdir -p "${cache_dir}/.maven"
     wget --quiet --no-check-certificate -O - "${maven_url}" | tar xz -C "${cache_dir}/.maven" --strip-components=1
   fi
