@@ -65,8 +65,7 @@ install_wget() {
   fi
   
   if [ ! -f "${cache_dir}/.tools/wget/bin/wget" ]; then
-    echo "Unable to install wget."
-    return 1
+    error "Unable to install wget."
   fi
   
   export PATH="${cache_dir}/.tools/wget/bin:${PATH}"
@@ -94,8 +93,7 @@ install_java() {
   cp -r "${cache_dir}/.jdk/." "${build_dir}/.jdk"
   
   if [ ! -f "${build_dir}/.jdk/bin/java" ]; then
-    echo "Unable to retrieve JDK."
-    return 1
+    error "Unable to retrieve JDK."
   fi
   
   export JAVA_HOME="${build_dir}/.jdk"
@@ -110,6 +108,8 @@ install_maven() {
   cache_dir=$1
   maven_url=${2:-"http://www.nic.funet.fi/pub/mirrors/apache.org/maven/maven-3/3.2.1/binaries/apache-maven-3.2.1-bin.tar.gz"}
 
+  echo "mvn: $(which mvn)"
+
   if [ ! -d "${cache_dir}" ]; then echo "Invalid cache directory to store Maven."; return 1; fi
 
   if [ ! -d "${cache_dir}/.maven" ] || [ ! -f "${cache_dir}/.maven/bin/mvn" ]; then
@@ -118,8 +118,7 @@ install_maven() {
   fi
   
   if [ ! -f "${cache_dir}/.maven/bin/mvn" ]; then
-    echo "Unable to retrieve Maven."
-    return 1
+    error "Unable to retrieve Maven."
   fi
   
   export MAVEN_OPTS=${MAVEN_OPTS:-"-Xmx384m -Xss128m"}
