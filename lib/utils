@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+mktmpdir() {
+  dir=$(mktemp -t fakesu-$1-XXXX)
+  rm -rf $dir && mkdir -p $dir
+  echo $dir
+}
+
 export_env_dir() {
   env_dir=$1
   whitelist_regex=${2:-''}
@@ -11,6 +17,30 @@ export_env_dir() {
       :
     done
   fi
+}
+
+install_wget() {
+  cache_dir=$1
+  wget_url=${2:-"http://ftp.gnu.org/gnu/wget/wget-1.15.tar.gz"}
+  
+  if [ ! -d "${cache_dir}" ]; then echo "Invalid cache directory to store wget."; return 1; fi
+  
+  if [ ! -d "${cache_dir}/.tools/wget" ] || [ ! -f "${cache_dir}/.tools/wget/bin/wget" ]; then
+    rm -rf mkdir -p "${cache_dir}/.tools/wget" && mkdir -p "${cache_dir}/.tools/wget"
+  
+    cd $(mktmpdir wget)
+    curl --silent http://ftp.gnu.org/gnu/wget/wget-1.13.4.tar.bz2 | tar xz --strip-components=1 
+    ./configure --prefix=${cache_dir}/.tools/wget --without-ssl
+    make
+    make install
+  }
+  
+  if [ ! -f "${cache_dir}/.tools/wget/bin/wget" ]; then
+    echo "Unable to install wget."
+    return 1
+  fi
+  
+  export PATH="${cache_dir}/.tools/wget/bin:${PATH}"
 }
 
 install_java() {

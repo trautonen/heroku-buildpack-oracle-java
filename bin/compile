@@ -19,6 +19,9 @@ export_env_dir $ENV_DIR
 #create the cache dir if it doesn't exist
 mkdir -p $CACHE_DIR
 
+echo -n "-----> Installing wget..."
+install_wget $CACHE_DIR
+echo " done"
 
 echo -n "-----> Installing JDK..."
 install_java $CACHE_DIR $BUILD_DIR
