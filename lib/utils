@@ -1,5 +1,30 @@
 #!/usr/bin/env bash
 
+error() {
+  echo " !     $*" >&2
+  exit 1
+}
+
+status() {
+  echo "-----> $*"
+}
+
+statusn() {
+  echo -n "-----> $*"
+}
+
+# sed -l basically makes sed replace and buffer through stdin to stdout
+# so you get updates while the command runs and dont wait for the end
+# e.g. npm install | indent
+indent() {
+  c='s/^/       /'
+  case $(uname) in
+    Darwin) sed -l "$c";; # mac/bsd sed: -l buffers on line boundaries
+    *)      sed -u "$c";; # unix/gnu sed: -u unbuffered (arbitrary) chunks of data
+  esac
+}
+
+
 mktmpdir() {
   dir=$(mktemp -t fakesu-$1-XXXX)
   rm -rf $dir && mkdir -p $dir
@@ -17,6 +42,10 @@ export_env_dir() {
       :
     done
   fi
+}
+
+wget_version() {
+  echo $(wget --version 2>&1 | head -n 1 | cut -d ' ' -f 3)
 }
 
 install_wget() {
@@ -43,6 +72,10 @@ install_wget() {
   export PATH="${cache_dir}/.tools/wget/bin:${PATH}"
 }
 
+java_version() {
+  echo $(java -version 2>&1 | head -n 1 | cut -d '"' -f 2)
+}
+
 install_java() {
   cache_dir=$1
   build_dir=$2
@@ -67,6 +100,10 @@ install_java() {
   
   export JAVA_HOME="${build_dir}/.jdk"
   export PATH="${build_dir}/.jdk/bin:${PATH}"
+}
+
+maven_version() {
+  echo $(mvn --version 2>&1 | head -n 1 | cut -d ' ' -f 3)
 }
 
 install_maven() {
