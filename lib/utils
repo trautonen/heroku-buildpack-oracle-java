@@ -56,6 +56,7 @@ install_wget() {
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store wget."; fi
   
   if [ ! -f "${cache_dir}/.tools/wget/bin/wget" ] || [ "${wget_ver}" != "$(wget_version)" ]; then
+    echo -n " (downloading)"
     rm -rf "${cache_dir}/.tools/wget" && mkdir -p "${cache_dir}/.tools/wget"
   
     cd $(mktmpdir wget)
@@ -87,6 +88,7 @@ install_java() {
   mkdir -p "${build_dir}/.jdk"
   
   if [ ! -f "${cache_dir}/.jdk/bin/java" ] || [ "${jdk_ver}" != "$(java_version)" ] ; then
+    echo -n " (downloading)"
     rm -rf "${cache_dir}/.jdk" && mkdir -p "${cache_dir}/.jdk"
     wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O - "${jdk_url}" | tar xz -C "${cache_dir}/.jdk" --strip-components=1 
     rm -rf "${cache_dir}/.jdk/src.zip" "${cache_dir}/.jdk/javafx-src.zip" "${cache_dir}/.jdk/db" "${cache_dir}/.jdk/man"
@@ -113,6 +115,7 @@ install_maven() {
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store Maven."; fi
 
   if [ ! -f "${cache_dir}/.maven/bin/mvn" ] || [ "${maven_ver}" != "$(maven_version)" ]; then
+    echo -n " (downloading)"
     rm -rf "${cache_dir}/.maven" && mkdir -p "${cache_dir}/.maven"
     wget --quiet --no-check-certificate -O - "${maven_url}" | tar xz -C "${cache_dir}/.maven" --strip-components=1
   fi
