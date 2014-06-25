@@ -60,7 +60,7 @@ install_wget() {
     cd $(mktmpdir wget)
     curl --silent "${wget_url}" | tar xz --strip-components=1
     ./configure --silent --prefix=${cache_dir}/.tools/wget --with-ssl=openssl
-    make --silent && make --silent install
+    make -s && make -s install
   fi
   
   if [ ! -f "${cache_dir}/.tools/wget/bin/wget" ]; then
@@ -105,9 +105,7 @@ maven_version() {
 
 install_maven() {
   cache_dir=$1
-  maven_url=${2:-"http://www.nic.funet.fi/pub/mirrors/apache.org/maven/maven-3/3.2.1/binaries/apache-maven-3.2.1-bin.tar.gz"}
-
-  echo "mvn: $(which mvn)"
+  maven_url=${2:-"http://ftp.heanet.ie/mirrors/www.apache.org/dist/maven/maven-3/3.2.1/binaries/apache-maven-3.2.1-bin.tar.gz"}
 
   if [ ! -d "${cache_dir}" ]; then echo "Invalid cache directory to store Maven."; return 1; fi
 
@@ -124,8 +122,6 @@ install_maven() {
   export M2_HOME="${cache_dir}/.maven"
   export M2="${M2_HOME}/bin"
   export PATH="${M2}:${PATH}"
-  
-  echo $($M2/mvn --version)
 }
 
 create_profile() {

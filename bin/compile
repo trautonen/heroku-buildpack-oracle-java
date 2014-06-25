@@ -37,6 +37,7 @@ BUILDCMD="mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/reposi
 status "Executing build..."
 echo "$BUILDCMD" | indent
 echo "[INFO] MAVEN_OPTS=$MAVEN_OPTS" | indent
+echo "[INFO] ------------------------------------------------------------------------" | indent
 
 $BUILDCMD 2>&1 | indent
 
