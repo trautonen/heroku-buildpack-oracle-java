@@ -124,6 +124,8 @@ install_maven() {
   export M2_HOME="${cache_dir}/.maven"
   export M2="${M2_HOME}/bin"
   export PATH="${M2}:${PATH}"
+  
+  echo $($M2/mvn --version)
 }
 
 create_profile() {
