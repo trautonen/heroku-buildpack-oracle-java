@@ -45,7 +45,8 @@ export_env_dir() {
 }
 
 wget_version() {
-  echo $(wget --version 2>&1 | head -n 1 | cut -d ' ' -f 3)
+  base=$1
+  echo $(${base}wget --version 2>&1 | head -n 1 | cut -d ' ' -f 3)
 }
 
 install_wget() {
@@ -55,10 +56,8 @@ install_wget() {
   
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store wget."; fi
   
-  echo -n "${wget_ver} : $(wget_version)"
-  echo "$(ls ${cache_dir}/.tools/wget/bin/wget)"
-  if [ ! -f "${cache_dir}/.tools/wget/bin/wget" ] || [ "${wget_ver}" != "$(wget_version)" ]; then
-    echo -n " (downloading)"
+  if [ ! -f "${cache_dir}/.tools/wget/bin/wget" ] || [ "${wget_ver}" != "$(wget_version ${cache_dir}/.tools/wget/bin/)" ]; then
+    echo -n " (downloading...)"
     rm -rf "${cache_dir}/.tools/wget" && mkdir -p "${cache_dir}/.tools/wget"
   
     cd $(mktmpdir wget)
@@ -75,7 +74,8 @@ install_wget() {
 }
 
 java_version() {
-  echo $(java -version 2>&1 | head -n 1 | cut -d '"' -f 2)
+  base=$1
+  echo $(${base}java -version 2>&1 | head -n 1 | cut -d '"' -f 2)
 }
 
 install_java() {
@@ -89,8 +89,8 @@ install_java() {
   
   mkdir -p "${build_dir}/.jdk"
   
-  if [ ! -f "${cache_dir}/.jdk/bin/java" ] || [ "${jdk_ver}" != "$(java_version)" ] ; then
-    echo -n " (downloading)"
+  if [ ! -f "${cache_dir}/.jdk/bin/java" ] || [ "${jdk_ver}" != "$(java_version ${cache_dir}/.jdk/bin/)" ] ; then
+    echo -n " (downloading...)"
     rm -rf "${cache_dir}/.jdk" && mkdir -p "${cache_dir}/.jdk"
     wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O - "${jdk_url}" | tar xz -C "${cache_dir}/.jdk" --strip-components=1 
     rm -rf "${cache_dir}/.jdk/src.zip" "${cache_dir}/.jdk/javafx-src.zip" "${cache_dir}/.jdk/db" "${cache_dir}/.jdk/man"
@@ -106,7 +106,8 @@ install_java() {
 }
 
 maven_version() {
-  echo $(mvn --version 2>&1 | head -n 1 | cut -d ' ' -f 3)
+  base=$1
+  echo $(${base}mvn --version 2>&1 | head -n 1 | cut -d ' ' -f 3)
 }
 
 install_maven() {
@@ -116,8 +117,8 @@ install_maven() {
 
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store Maven."; fi
 
-  if [ ! -f "${cache_dir}/.maven/bin/mvn" ] || [ "${maven_ver}" != "$(maven_version)" ]; then
-    echo -n " (downloading)"
+  if [ ! -f "${cache_dir}/.maven/bin/mvn" ] || [ "${maven_ver}" != "$(maven_version ${cache_dir}/.maven/bin/)" ]; then
+    echo -n " (downloading...)"
     rm -rf "${cache_dir}/.maven" && mkdir -p "${cache_dir}/.maven"
     wget --quiet --no-check-certificate -O - "${maven_url}" | tar xz -C "${cache_dir}/.maven" --strip-components=1
   fi
