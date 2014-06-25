@@ -33,7 +33,7 @@ install_wget() {
     ./configure --prefix=${cache_dir}/.tools/wget --without-ssl
     make
     make install
-  }
+  fi
   
   if [ ! -f "${cache_dir}/.tools/wget/bin/wget" ]; then
     echo "Unable to install wget."
