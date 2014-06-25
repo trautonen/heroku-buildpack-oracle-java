@@ -26,7 +26,7 @@ install_wget() {
   if [ ! -d "${cache_dir}" ]; then echo "Invalid cache directory to store wget."; return 1; fi
   
   if [ ! -d "${cache_dir}/.tools/wget" ] || [ ! -f "${cache_dir}/.tools/wget/bin/wget" ]; then
-    rm -rf mkdir -p "${cache_dir}/.tools/wget" && mkdir -p "${cache_dir}/.tools/wget"
+    rm -rf "${cache_dir}/.tools/wget" && mkdir -p "${cache_dir}/.tools/wget"
   
     cd $(mktmpdir wget)
     curl --silent http://ftp.gnu.org/gnu/wget/wget-1.13.4.tar.bz2 | tar xz --strip-components=1 
