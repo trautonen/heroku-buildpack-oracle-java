@@ -24,7 +24,6 @@ indent() {
   esac
 }
 
-
 mktmpdir() {
   dir=$(mktemp -t fakesu-$1-XXXX)
   rm -rf $dir && mkdir -p $dir
@@ -103,6 +102,26 @@ install_java() {
   
   export JAVA_HOME="${build_dir}/.jdk"
   export PATH="${build_dir}/.jdk/bin:${PATH}"
+}
+
+install_jce() {
+  java_ver=$(java_version)
+  
+  if [ ! -n "${JAVA_HOME}" ]; then error "JAVA_HOME not set, unable to install JCE."; fi
+  if [ ! -d "${JAVA_HOME}" ]; then error "JAVA_HOME directory does not exist, unable to install JCE."; fi
+  
+  if [ "${java_ver:0:3}" == "1.8" ]; then
+    jce_url="http://download.oracle.com/otn-pub/java/jce/8/jce_policy-8.zip"
+    jce_dir="UnlimitedJCEPolicyJDK8"
+  else
+    error "Unable to resolve Java version for JCE"
+  fi
+  
+  cd $(mktmpdir jce)
+  wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O jce_policy.zip "${jce_url}"
+  jar xf jce_policy.zip
+  cd $jce_dir
+  cp -f *.jar "${JAVA_HOME}/jre/lib/security/"
 }
 
 maven_version() {
