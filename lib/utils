@@ -118,7 +118,7 @@ install_jce() {
   fi
   
   cd $(mktmpdir jce)
-  wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O jce_policy.zip "${jce_url}"
+  wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O jce_policy.zip "${jce_url}"
   jar xf jce_policy.zip
   cd $jce_dir
   cp -f *.jar "${JAVA_HOME}/jre/lib/security/"
