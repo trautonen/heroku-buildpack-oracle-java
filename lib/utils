@@ -152,6 +152,20 @@ install_maven() {
   export PATH="${M2}:${PATH}"
 }
 
+install_newrelic() {
+  build_dir=$1
+  newrelic_url=${2:-"http://search.maven.org/remotecontent?filepath=com/newrelic/agent/java/newrelic-agent/3.7.2/newrelic-agent-3.7.2.jar"}
+  
+  if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to install NewRelic agent."; fi
+  
+  mkdir -p "${build_dir}/.newrelic"
+  wget --quiet -O "${build_dir}/.newrelic/newrelic-agent.jar" "${newrelic_url}"
+  
+  if [ ! -f "${build_dir}/.newrelic/newrelic-agent.jar" ]; then
+    error "Unable to retrieve NewRelic agent."
+  fi
+}
+
 install_gems() {
   cache_dir=$1
   gems=$2
@@ -173,7 +187,12 @@ create_profile() {
 
   profile_path="${build_dir}/.profile.d/java.sh"
   mkdir -p $(dirname $profile_path)
+  
   echo 'export JAVA_HOME="/app/.jdk"' > $profile_path
   echo 'export JAVA_OPTS=${JAVA_OPTS:-"-Xmx384m -Xss128m"}' >> $profile_path
   echo 'export PATH="/app/.jdk/bin:$PATH"' >> $profile_path
+  echo '' >> $profile_path
+  echo 'if [ -n $NEW_RELIC_LICENSE_KEY ]; then' >> $profile_path
+  echo '  export JAVA_OPTS="${JAVA_OPTS} -javaagent:/app/.newrelic/newrelic-agent.jar"' >> $profile_path
+  echo 'fi' >> $profile_path
 }
