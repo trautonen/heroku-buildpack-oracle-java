@@ -6,6 +6,10 @@ The buildpack installs Oracle JDK 1.8.0_05 and Maven 3.2.1 by default. The
 buildpack can also be configured to install JCE Unlimited Strength policy
 files.
 
+*Oracle License Agreement*  
+By using this buildpack you must agree the Oracle Binary Code License
+Agreement for the Java SE Platform Products and JavaFX.  
+http://www.oracle.com/technetwork/java/javase/terms/license/index.html
 
 Usage
 -----
