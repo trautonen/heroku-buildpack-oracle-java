@@ -192,7 +192,7 @@ create_profile() {
   echo 'export JAVA_OPTS=${JAVA_OPTS:-"-Xmx384m -Xss128m"}' >> $profile_path
   echo 'export PATH="/app/.jdk/bin:$PATH"' >> $profile_path
   echo '' >> $profile_path
-  echo 'if [ -n $NEW_RELIC_LICENSE_KEY ]; then' >> $profile_path
+  echo 'if [ -f /app/.newrelic/newrelic-agent.jar ]; then' >> $profile_path
   echo '  export JAVA_OPTS="${JAVA_OPTS} -javaagent:/app/.newrelic/newrelic-agent.jar"' >> $profile_path
   echo 'fi' >> $profile_path
 }

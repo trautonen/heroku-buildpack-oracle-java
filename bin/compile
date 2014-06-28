@@ -37,11 +37,12 @@ statusn "Installing Maven..."
 install_maven $CACHE_DIR
 echo " version $(maven_version) installed"
 
-if [ -n $NEW_RELIC_LICENSE_KEY ]; then
-  statusn "Installing NewRelic agent..."
-  install_newrelic $BUILD_DIR
-  echo " done"
-fi
+# NewRelic does not support Java8 until 3.8.x
+#if [ -n $NEW_RELIC_LICENSE_KEY ]; then
+#  statusn "Installing NewRelic agent..."
+#  install_newrelic $BUILD_DIR
+#  echo " done"
+#fi
 
 if [ -n $GEMS ]; then
   status "Installing Gems..."
