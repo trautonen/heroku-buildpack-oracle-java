@@ -4,7 +4,8 @@ Heroku buildpack: Oracle JDK
 This is a Heroku buildpack for Java applications that use Maven as build tool.
 The buildpack installs Oracle JDK 1.8.0_20 and Maven 3.2.1 by default. The
 buildpack can also be configured to install JCE Unlimited Strength policy
-files.
+files and Ruby gems. If the application has NewRelic plugin installed, the
+buildpack will install NewRelic java agent automatically and enable it.
 
 **Oracle License Agreement**  
 By using this buildpack you must agree the Oracle Binary Code License
