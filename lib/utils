@@ -79,9 +79,9 @@ java_version() {
 
 install_java() {
   cache_dir=$1
-  build_dir=$2
-  jdk_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u20-b26/jdk-8u20-linux-x64.tar.gz"}
-  jdk_ver=${4:-"1.8.0_20"}
+  build_dir=$2  
+  jdk_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u25-b17/jdk-8u25-linux-x64.tar.gz"}
+  jdk_ver=${4:-"1.8.0_25"}
   
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store JDK."; fi
   if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to install JDK."; fi
@@ -131,8 +131,8 @@ maven_version() {
 
 install_maven() {
   cache_dir=$1
-  maven_url=${2:-"http://ftp.heanet.ie/mirrors/www.apache.org/dist/maven/maven-3/3.2.1/binaries/apache-maven-3.2.1-bin.tar.gz"}
-  maven_ver=${3:-"3.2.1"}
+  maven_url=${2:-"http://ftp.heanet.ie/mirrors/www.apache.org/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz"}
+  maven_ver=${3:-"3.2.3"}
 
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store Maven."; fi
 
