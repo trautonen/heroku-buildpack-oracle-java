@@ -25,8 +25,8 @@ Usage
     -----> Fetching custom git buildpack... done
     -----> Java app detected
     -----> Installing wget... version 1.15 installed
-    -----> Installing JDK... (downloading...) version 1.8.0_20 installed
-    -----> Installing Maven... version 3.2.1 installed
+    -----> Installing JDK... (downloading...) version 1.8.0_25 installed
+    -----> Installing Maven... version 3.2.3 installed
     -----> Installing NewRelic agent... done
     -----> Executing build...
            mvn -B -Duser.home=/tmp/build_2be971b4-90c0-48d4-8045-8ef1b5521352 -Dmaven.repo.local=/app/tmp/cache/.m2/repository -DskipTests=true -U clean install
