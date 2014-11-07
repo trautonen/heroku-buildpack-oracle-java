@@ -27,7 +27,7 @@ statusn "Installing JDK..."
 install_java $CACHE_DIR $BUILD_DIR
 echo " version $(java_version) installed"
 
-if [ "true" == $JCE ]; then
+if [ "true" = $JCE ]; then
   statusn "Installing JCE Unlimited Strength..."
   install_jce
   echo " done"
@@ -37,13 +37,13 @@ statusn "Installing Maven..."
 install_maven $CACHE_DIR
 echo " version $(maven_version) installed"
 
-if [ -n $NEW_RELIC_LICENSE_KEY ]; then
+if [ -n "$NEW_RELIC_LICENSE_KEY" ]; then
   statusn "Installing NewRelic agent..."
   install_newrelic $BUILD_DIR
   echo " done"
 fi
 
-if [ -n $GEMS ]; then
+if [ -n "$GEMS" ]; then
   status "Installing Gems..."
   install_gems $CACHE_DIR $GEMS
 fi
@@ -60,4 +60,13 @@ $BUILDCMD 2>&1 | egrep --line-buffered -v '^(\[INFO\] )?(Downloading:|Downloaded
 
 create_profile $BUILD_DIR
 
-rm -rf "$CACHE_DIR/.m2" "$CACHE_DIR/.gems"
+echo "Cleaning enviroment..."
+echo -n "1. Delete Maven repo : "
+rm -rf "$CACHE_DIR/.m2" 
+echo "OK"
+
+if [ -f "$CACHE_DIR/.gems" ]; then
+  echo -n "2. Delete Gems repo "
+  rm -rf "$CACHE_DIR/.gems"
+  echo "OK"
+fi
