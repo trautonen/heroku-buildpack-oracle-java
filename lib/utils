@@ -204,7 +204,7 @@ clean_environment() {
   rm -rf "${cache_dir}/.m2"
   echo " done"
 
-  if [ -f "${cache_dir}/.gems" ]; then
+  if [ -d "${cache_dir}/.gems" ]; then
     echo -n "- Deleting Ruby Gems repository..." | indent
     rm -rf "${cache_dir}/.gems"
     echo " done"
