@@ -198,13 +198,15 @@ create_profile() {
 }
 
 clean_environment() {
-  echo -n "1. Deleting local Maven repository:" | indent
-  rm -rf "$CACHE_DIR/.m2"
+  cache_dir=$1
+
+  echo -n "- Deleting local Maven repository..." | indent
+  rm -rf "${cache_dir}/.m2"
   echo " done"
 
-  if [ -f "$CACHE_DIR/.gems" ]; then
-    echo -n "2. Deleting Ruby Gems repository:" | indent
-    rm -rf "$CACHE_DIR/.gems"
+  if [ -f "${cache_dir}/.gems" ]; then
+    echo -n "- Deleting Ruby Gems repository..." | indent
+    rm -rf "${cache_dir}/.gems"
     echo " done"
   fi
 }
