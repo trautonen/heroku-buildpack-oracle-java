@@ -60,13 +60,5 @@ $BUILDCMD 2>&1 | egrep --line-buffered -v '^(\[INFO\] )?(Downloading:|Downloaded
 
 create_profile $BUILD_DIR
 
-echo "Cleaning enviroment..."
-echo -n "1. Delete Maven repo : "
-rm -rf "$CACHE_DIR/.m2" 
-echo "OK"
-
-if [ -f "$CACHE_DIR/.gems" ]; then
-  echo -n "2. Delete Gems repo "
-  rm -rf "$CACHE_DIR/.gems"
-  echo "OK"
-fi
+status "Cleaning enviroment..."
+clean_environment

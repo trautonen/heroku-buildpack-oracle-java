@@ -196,3 +196,15 @@ create_profile() {
   echo '  export JAVA_OPTS="${JAVA_OPTS} -javaagent:/app/.newrelic/newrelic-agent.jar"' >> $profile_path
   echo 'fi' >> $profile_path
 }
+
+clean_environment() {
+  echo -n "1. Deleting local Maven repository:" | indent
+  rm -rf "$CACHE_DIR/.m2"
+  echo " done"
+
+  if [ -f "$CACHE_DIR/.gems" ]; then
+    echo -n "2. Deleting Ruby Gems repository:" | indent
+    rm -rf "$CACHE_DIR/.gems"
+    echo " done"
+  fi
+}
