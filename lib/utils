@@ -154,7 +154,7 @@ install_maven() {
 
 install_newrelic() {
   build_dir=$1
-  newrelic_url=${2:-"http://search.maven.org/remotecontent?filepath=com/newrelic/agent/java/newrelic-agent/3.11.0/newrelic-agent-3.11.0.jar"}
+  newrelic_url=${2:-"http://search.maven.org/remotecontent?filepath=com/newrelic/agent/java/newrelic-agent/3.12.0/newrelic-agent-3.12.0.jar"}
   
   if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to install NewRelic agent."; fi
   
