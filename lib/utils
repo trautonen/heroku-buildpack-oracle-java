@@ -131,8 +131,8 @@ maven_version() {
 
 install_maven() {
   cache_dir=$1
-  maven_url=${2:-"http://ftp.heanet.ie/mirrors/www.apache.org/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz"}
-  maven_ver=${3:-"3.2.3"}
+  maven_url=${2:-"http://www.eu.apache.org/dist/maven/maven-3/3.2.5/binaries/apache-maven-3.2.5-bin.tar.gz"}
+  maven_ver=${3:-"3.2.5"}
 
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store Maven."; fi
 
