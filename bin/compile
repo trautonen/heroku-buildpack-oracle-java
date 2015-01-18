@@ -50,7 +50,10 @@ fi
 
 cd $BUILD_DIR
 
-BUILDCMD="mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository -DskipTests=true -U clean install"
+BUILDCMD="mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository"
+BUILDCMD="$BUILDCMD ${MAVEN_CUSTOM_OPTS:-"-DskipTests=true -U"}"
+BUILDCMD="$BUILDCMD ${MAVEN_CUSTOM_GOALS:-"clean install"}"
+
 status "Executing build..."
 echo "$BUILDCMD" | indent
 echo "[INFO] MAVEN_OPTS=$MAVEN_OPTS" | indent
