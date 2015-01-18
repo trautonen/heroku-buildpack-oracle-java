@@ -37,7 +37,7 @@ statusn "Installing Maven..."
 install_maven $CACHE_DIR
 echo " version $(maven_version) installed"
 
-if [ -n "$NEW_RELIC_LICENSE_KEY" ] && [ "true" != "$NEW_RELIC_DISABLED" ]; then
+if [ -n "$NEW_RELIC_LICENSE_KEY" ]; then
   statusn "Installing NewRelic agent..."
   install_newrelic $BUILD_DIR
   echo " done"
