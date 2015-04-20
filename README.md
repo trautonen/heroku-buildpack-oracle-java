@@ -24,7 +24,6 @@ Usage
     ...
     -----> Fetching custom git buildpack... done
     -----> Java app detected
-    -----> Installing wget... version 1.15 installed
     -----> Installing JDK... (downloading...) version 1.8.0_45 installed
     -----> Installing Maven... version 3.3.1 installed
     -----> Installing NewRelic agent... done

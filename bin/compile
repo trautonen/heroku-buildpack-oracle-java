@@ -19,10 +19,6 @@ export_env_dir $ENV_DIR
 #create the cache dir if it doesn't exist
 mkdir -p $CACHE_DIR
 
-statusn "Installing wget..."
-install_wget $CACHE_DIR
-echo " version $(wget_version) installed"
-
 statusn "Installing JDK..."
 install_java $CACHE_DIR $BUILD_DIR
 echo " version $(java_version) installed"

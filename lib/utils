@@ -43,35 +43,6 @@ export_env_dir() {
   fi
 }
 
-wget_version() {
-  base=$1
-  echo $(${base}wget --version 2>&1 | head -n 1 | cut -d ' ' -f 3)
-}
-
-install_wget() {
-  cache_dir=$1
-  wget_url=${2:-"http://ftp.gnu.org/gnu/wget/wget-1.15.tar.gz"}
-  wget_ver=${3:-"1.15"}
-  
-  if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store wget."; fi
-  
-  if [ ! -f "${cache_dir}/.tools/wget/bin/wget" ] || [ "${wget_ver}" != "$(wget_version ${cache_dir}/.tools/wget/bin/)" ]; then
-    echo -n " (downloading...)"
-    rm -rf "${cache_dir}/.tools/wget" && mkdir -p "${cache_dir}/.tools/wget"
-  
-    cd $(mktmpdir wget)
-    curl -s -j -k -L "${wget_url}" | tar xz --strip-components=1
-    ./configure --silent --prefix=${cache_dir}/.tools/wget --with-ssl=openssl >/dev/null 2>&1
-    make --silent >/dev/null 2>&1 && make --silent install >/dev/null 2>&1
-  fi
-  
-  if [ ! -f "${cache_dir}/.tools/wget/bin/wget" ]; then
-    error "Unable to install wget."
-  fi
-  
-  export PATH="${cache_dir}/.tools/wget/bin:${PATH}"
-}
-
 java_version() {
   base=$1
   echo $(${base}java -version 2>&1 | head -n 1 | cut -d '"' -f 2)
