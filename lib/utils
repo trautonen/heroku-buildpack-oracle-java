@@ -80,8 +80,8 @@ java_version() {
 install_java() {
   cache_dir=$1
   build_dir=$2  
-  jdk_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u40-b26/jdk-8u40-linux-x64.tar.gz"}
-  jdk_ver=${4:-"1.8.0_40"}
+  jdk_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jdk-8u45-linux-x64.tar.gz"}
+  jdk_ver=${4:-"1.8.0_45"}
   
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store JDK."; fi
   if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to install JDK."; fi
