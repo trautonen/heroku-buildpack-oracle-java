@@ -25,7 +25,7 @@ Usage
     -----> Fetching custom git buildpack... done
     -----> Java app detected
     -----> Installing wget... version 1.15 installed
-    -----> Installing JDK... (downloading...) version 1.8.0_40 installed
+    -----> Installing JDK... (downloading...) version 1.8.0_45 installed
     -----> Installing Maven... version 3.3.1 installed
     -----> Installing NewRelic agent... done
     -----> Executing build...
@@ -43,6 +43,8 @@ Config vars can be set using the Heroku CLI:
 
     $ heroku config:set VAR="value"
 
+* `NEW_RELIC_DISABLED`: New Relic agent  
+  `NEW_RELIC_DISABLED="true"` will disable New Relic agent for the application
 * `JCE`: JCE Unlimited Strength  
   `JCE="true"` will download and apply the JCE Unlimited Strength policy files
 * `GEMS`: Ruby gems  
