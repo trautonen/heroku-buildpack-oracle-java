@@ -60,7 +60,7 @@ install_wget() {
     rm -rf "${cache_dir}/.tools/wget" && mkdir -p "${cache_dir}/.tools/wget"
   
     cd $(mktmpdir wget)
-    curl --silent "${wget_url}" | tar xz --strip-components=1
+    curl -s -j -k -L "${wget_url}" | tar xz --strip-components=1
     ./configure --silent --prefix=${cache_dir}/.tools/wget --with-ssl=openssl >/dev/null 2>&1
     make --silent >/dev/null 2>&1 && make --silent install >/dev/null 2>&1
   fi
@@ -91,7 +91,7 @@ install_java() {
   if [ ! -f "${cache_dir}/.jdk/bin/java" ] || [ "${jdk_ver}" != "$(java_version ${cache_dir}/.jdk/bin/)" ] ; then
     echo -n " (downloading...)"
     rm -rf "${cache_dir}/.jdk" && mkdir -p "${cache_dir}/.jdk"
-    wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O - "${jdk_url}" | tar xz -C "${cache_dir}/.jdk" --strip-components=1 
+    curl -s -j -k -L -H "Cookie: oraclelicense=accept-securebackup-cookie" "${jdk_url}" | tar xz -C "${cache_dir}/.jdk" --strip-components=1
     rm -rf "${cache_dir}/.jdk/src.zip" "${cache_dir}/.jdk/javafx-src.zip" "${cache_dir}/.jdk/db" "${cache_dir}/.jdk/man"
   fi
   cp -r "${cache_dir}/.jdk/." "${build_dir}/.jdk"
@@ -118,7 +118,7 @@ install_jce() {
   fi
   
   cd $(mktmpdir jce)
-  wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O jce_policy.zip "${jce_url}"
+  curl -s -j -k -L -H "Cookie: oraclelicense=accept-securebackup-cookie" -o jce_policy.zip "${jce_url}"
   jar xf jce_policy.zip
   cd $jce_dir
   cp -f *.jar "${JAVA_HOME}/jre/lib/security/"
@@ -139,7 +139,7 @@ install_maven() {
   if [ ! -f "${cache_dir}/.maven/bin/mvn" ] || [ "${maven_ver}" != "$(maven_version ${cache_dir}/.maven/bin/)" ]; then
     echo -n " (downloading...)"
     rm -rf "${cache_dir}/.maven" && mkdir -p "${cache_dir}/.maven"
-    wget --quiet --no-check-certificate -O - "${maven_url}" | tar xz -C "${cache_dir}/.maven" --strip-components=1
+    curl -s -j -k -L "${maven_url}" | tar xz -C "${cache_dir}/.maven" --strip-components=1
   fi
   
   if [ ! -f "${cache_dir}/.maven/bin/mvn" ]; then
@@ -159,7 +159,7 @@ install_newrelic() {
   if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to install NewRelic agent."; fi
   
   mkdir -p "${build_dir}/.newrelic"
-  wget --quiet -O "${build_dir}/.newrelic/newrelic-agent.jar" "${newrelic_url}"
+  curl -s -j -k -L -o "${build_dir}/.newrelic/newrelic-agent.jar" "${newrelic_url}"
   
   if [ ! -f "${build_dir}/.newrelic/newrelic-agent.jar" ]; then
     error "Unable to retrieve NewRelic agent."
