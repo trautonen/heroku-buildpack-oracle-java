@@ -6,7 +6,7 @@ BUILD_DIR=$1
 cat <<EOF
 ---
 config_vars:
-  JAVA_OPTS: -XX:+UseCompressedOops
+  JAVA_OPTS: -XX:+UseCompressedOops -XX:+UseCompressedClassPointers
 addons:
   heroku-postgresql:hobby-dev
 EOF
