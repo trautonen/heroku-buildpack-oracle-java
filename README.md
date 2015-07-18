@@ -42,12 +42,20 @@ Config vars can be set using the Heroku CLI:
 
     $ heroku config:set VAR="value"
 
+* `MAVEN_CUSTOM_OPTS`: Command line options for Maven build  
+  Defaults to `-DskipTests=true -U`
+* `MAVEN_CUSTOM_GOALS`: Goals for Maven build  
+  Defaults to `clean install`
+* `MAVEN_OPTS`: Maven environment variables  
+  Defaults to `-Xmx384m -Xss128m`
+* `JAVA_OPTS`: Java environment variables for application runtime  
+  Defaults to `-Xmx384m -Xss128m`
 * `NEW_RELIC_DISABLED`: New Relic agent  
-  `NEW_RELIC_DISABLED="true"` will disable New Relic agent for the application
+  `true` will disable New Relic agent for the application
 * `JCE`: JCE Unlimited Strength  
-  `JCE="true"` will download and apply the JCE Unlimited Strength policy files
-* `GEMS`: Ruby gems  
-  `GEMS="sass compass"` will install sass and compass Ruby gems  
+  `true` will download and apply the JCE Unlimited Strength policy files
+* `GEMS`: Ruby gems to be installed  
+  `sass compass` will install sass and compass Ruby gems  
   (gems are only available at slug compilation time)
 
 
