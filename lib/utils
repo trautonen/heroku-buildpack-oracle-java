@@ -51,8 +51,8 @@ java_version() {
 install_java() {
   cache_dir=$1
   build_dir=$2  
-  jdk_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jdk-8u60-linux-x64.tar.gz"}
-  jdk_ver=${4:-"1.8.0_60"}
+  jdk_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz"}
+  jdk_ver=${4:-"1.8.0_91"}
   
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store JDK."; fi
   if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to install JDK."; fi
@@ -102,8 +102,8 @@ maven_version() {
 
 install_maven() {
   cache_dir=$1
-  maven_url=${2:-"http://www.eu.apache.org/dist/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz"}
-  maven_ver=${3:-"3.3.3"}
+  maven_url=${2:-"http://www.eu.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz"}
+  maven_ver=${3:-"3.3.9"}
 
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store Maven."; fi
 
@@ -125,7 +125,7 @@ install_maven() {
 
 install_newrelic() {
   build_dir=$1
-  newrelic_url=${2:-"http://search.maven.org/remotecontent?filepath=com/newrelic/agent/java/newrelic-agent/3.19.2/newrelic-agent-3.19.2.jar"}
+  newrelic_url=${2:-"http://search.maven.org/remotecontent?filepath=com/newrelic/agent/java/newrelic-agent/3.29.0/newrelic-agent-3.29.0.jar"}
 
   if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to install NewRelic agent."; fi
   
