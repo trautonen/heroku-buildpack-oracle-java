@@ -50,15 +50,15 @@ java_version() {
 
 install_java() {
   cache_dir=$1
-  build_dir=$2  
-  jdk_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz"}
+  build_dir=$2
+  jdk_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jdk-8u151-linux-x64.tar.gz"}
   jdk_ver=${4:-"1.8.0_91"}
-  
+
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store JDK."; fi
   if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to install JDK."; fi
-  
+
   mkdir -p "${build_dir}/.jdk"
-  
+
   if [ ! -f "${cache_dir}/.jdk/bin/java" ] || [ "${jdk_ver}" != "$(java_version ${cache_dir}/.jdk/bin/)" ] ; then
     echo -n " (downloading...)"
     rm -rf "${cache_dir}/.jdk" && mkdir -p "${cache_dir}/.jdk"
@@ -66,28 +66,28 @@ install_java() {
     rm -rf "${cache_dir}/.jdk/src.zip" "${cache_dir}/.jdk/javafx-src.zip" "${cache_dir}/.jdk/db" "${cache_dir}/.jdk/man"
   fi
   cp -r "${cache_dir}/.jdk/." "${build_dir}/.jdk"
-  
+
   if [ ! -f "${build_dir}/.jdk/bin/java" ]; then
     error "Unable to retrieve JDK."
   fi
-  
+
   export JAVA_HOME="${build_dir}/.jdk"
   export PATH="${build_dir}/.jdk/bin:${PATH}"
 }
 
 install_jce() {
   java_ver=$(java_version)
-  
+
   if [ ! -n "${JAVA_HOME}" ]; then error "JAVA_HOME not set, unable to install JCE."; fi
   if [ ! -d "${JAVA_HOME}" ]; then error "JAVA_HOME directory does not exist, unable to install JCE."; fi
-  
+
   if [ "${java_ver:0:3}" == "1.8" ]; then
     jce_url="http://download.oracle.com/otn-pub/java/jce/8/jce_policy-8.zip"
     jce_dir="UnlimitedJCEPolicyJDK8"
   else
     error "Unable to resolve Java version for JCE"
   fi
-  
+
   cd $(mktmpdir jce)
   curl -s -j -k -L -H "Cookie: oraclelicense=accept-securebackup-cookie" -o jce_policy.zip "${jce_url}"
   jar xf jce_policy.zip
@@ -112,11 +112,11 @@ install_maven() {
     rm -rf "${cache_dir}/.maven" && mkdir -p "${cache_dir}/.maven"
     curl -s -j -k -L "${maven_url}" | tar xz -C "${cache_dir}/.maven" --strip-components=1
   fi
-  
+
   if [ ! -f "${cache_dir}/.maven/bin/mvn" ]; then
     error "Unable to retrieve Maven."
   fi
-  
+
   export MAVEN_OPTS=${MAVEN_OPTS:-"-Xmx384m -Xss128m"}
   export M2_HOME="${cache_dir}/.maven"
   export M2="${M2_HOME}/bin"
@@ -128,10 +128,10 @@ install_newrelic() {
   newrelic_url=${2:-"http://search.maven.org/remotecontent?filepath=com/newrelic/agent/java/newrelic-agent/3.29.0/newrelic-agent-3.29.0.jar"}
 
   if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to install NewRelic agent."; fi
-  
+
   mkdir -p "${build_dir}/.newrelic"
   curl -s -j -k -L -o "${build_dir}/.newrelic/newrelic-agent.jar" "${newrelic_url}"
-  
+
   if [ ! -f "${build_dir}/.newrelic/newrelic-agent.jar" ]; then
     error "Unable to retrieve NewRelic agent."
   fi
@@ -140,25 +140,25 @@ install_newrelic() {
 install_gems() {
   cache_dir=$1
   gems=$2
-  
+
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store Ruby gems."; fi
 
   rm -rf "${cache_dir}/.gems" && mkdir -p "${cache_dir}/.gems"
 
   gem install --no-rdoc --no-ri -i "${cache_dir}/.gems" ${gems} 2>&1 | indent
-  
+
   export PATH="${cache_dir}/.gems/bin:${PATH}"
   export GEM_PATH="${cache_dir}/.gems:${GEM_PATH}"
 }
 
 create_profile() {
   build_dir=$1
-  
+
   if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to create Java profile."; fi
 
   profile_path="${build_dir}/.profile.d/java.sh"
   mkdir -p $(dirname $profile_path)
-  
+
   echo 'export JAVA_HOME="/app/.jdk"' > $profile_path
   echo 'export JAVA_OPTS=${JAVA_OPTS:-"-Xmx384m -Xss128m"}' >> $profile_path
   echo 'export PATH="/app/.jdk/bin:$PATH"' >> $profile_path
